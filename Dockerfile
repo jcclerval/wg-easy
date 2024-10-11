@@ -7,6 +7,8 @@ RUN npm install -g npm@latest
 
 # Copy Web UI
 COPY src /app
+COPY start.sh /app/
+
 WORKDIR /app
 RUN npm ci --omit=dev &&\
     mv node_modules /node_modules
@@ -36,7 +38,9 @@ RUN apk add --no-cache \
     dumb-init \
     iptables \
     iptables-legacy \
-    wireguard-tools
+    wireguard-tools \
+    dnsmasq \
+    iperf3
 
 # Use iptables-legacy
 RUN update-alternatives --install /sbin/iptables iptables /sbin/iptables-legacy 10 --slave /sbin/iptables-restore iptables-restore /sbin/iptables-legacy-restore --slave /sbin/iptables-save iptables-save /sbin/iptables-legacy-save
@@ -46,4 +50,6 @@ ENV DEBUG=Server,WireGuard
 
 # Run Web UI
 WORKDIR /app
-CMD ["/usr/bin/dumb-init", "node", "server.js"]
+# CMD ["/usr/bin/dumb-init", "node", "server.js"]
+CMD ["/bin/sh", "start.sh"]
+

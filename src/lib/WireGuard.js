@@ -120,7 +120,7 @@ PostDown = ${WG_POST_DOWN}
 [Peer]
 PublicKey = ${client.publicKey}
 ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
-}AllowedIPs = ${client.address}/32`;
+}AllowedIPs = ${client.allowedIPs}`;
     }
 
     debug('Config saving...');
@@ -278,6 +278,7 @@ Endpoint = ${WG_HOST}:${WG_CONFIG_PORT}`;
       updatedAt: new Date(),
       expiredAt: null,
       enabled: true,
+      allowedIPs: address + '/32',
     };
     if (expiredDate) {
       client.expiredAt = new Date(expiredDate);
